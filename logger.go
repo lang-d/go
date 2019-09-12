@@ -1,47 +1,57 @@
 package golog
 
-import (
-	"io"
-	"os"
-)
+import "os"
 
 type Logger struct {
-	Level            int
-	Writer           io.Writer
-	console          io.Writer
-	errorConsole     io.Writer
-	SplitLogFileType string
+	Handlers []Handler
+	Level    *level
 }
 
 func NewLogger() *Logger {
-	return &Logger{
-		Level:        INFO,
-		console:      os.Stdout,
-		errorConsole: os.Stderr,
+	return &Logger{Handlers: []Handler{NewConsleHandler()}, Level: INFO}
+}
+
+func (this *Logger) AddHandler(handler Handler) *Logger {
+	this.Handlers = append(this.Handlers, handler)
+	return this
+}
+
+func (this *Logger) SetHandlers(handlers []Handler) *Logger {
+	this.Handlers = handlers
+	return this
+}
+
+func (this *Logger) SetLevel(lev *level) *Logger {
+	this.Level = lev
+	return this
+}
+
+func (this *Logger) Infof(format string, args ...interface{}) *Logger {
+	return this.Log(INFO, format, args...)
+}
+
+func (this *Logger) Debugf(format string, args ...interface{}) *Logger {
+	return this.Log(DEBUG, format, args...)
+}
+
+func (this *Logger) Errorf(format string, args ...interface{}) *Logger {
+	return this.Log(ERROR, format, args...)
+}
+
+func (this *Logger) Warnf(format string, args ...interface{}) *Logger {
+	return this.Log(WARN, format, args...)
+}
+
+func (this *Logger) Fatalf(format string, args ...interface{}) {
+	this.Log(FATAL, format, args...)
+	os.Exit(1)
+}
+
+func (this *Logger) Log(level *level, format string, args ...interface{}) *Logger {
+	if this.Level.isEnable(level) {
+		for _, h := range this.Handlers {
+			h.Work(level, format, args...)
+		}
 	}
-}
-
-func (this *Logger) SetWriter(writer io.Writer) *Logger {
-	return this
-}
-
-func (this *Logger) SetLevel(level int) *Logger {
-	this.Level = level
-	return this
-}
-
-func (this *Logger) SetEnableConsole(enable bool) *Logger {
-	return this
-}
-
-func (this *Logger) SetSplitLogFileType(splitType string) *Logger {
-	switch splitType {
-	case SPLIT_BY_DAY:
-	case SPLIT_BY_HOUR:
-	case SPLIT_BY_SIZE:
-	default:
-		panic("not support this type:" + splitType)
-	}
-	this.SplitLogFileType = splitType
 	return this
 }
