@@ -229,14 +229,20 @@ func (this *FileHandler) doWork(level *level, format string, args ...interface{}
 	}
 	msg := this.Formatter.Format(b, level.string(), format, args...)
 
+	var err error
+
 	if level.isEnable(ERROR) {
-		_, _ = this.ErrorWriter.Write(msg)
+		_, err = this.ErrorWriter.Write(msg)
 	} else {
-		_, _ = this.Writer.Write(msg)
+		_, err = this.Writer.Write(msg)
 
 	}
 	b.Reset()
 	this.bufferPool.Put(b)
+
+	if err != nil {
+		panic(err)
+	}
 
 }
 
