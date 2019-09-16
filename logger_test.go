@@ -1,7 +1,7 @@
 package golog_test
 
 import (
-	log "golog"
+	log "github.com/lang-d/golog"
 	"testing"
 	"time"
 )
