@@ -9,6 +9,7 @@
 #### 使用默认的设置打印日志
 
 ```go
+    import log "github.com/lang-d/golog" 
 	log.Infof("%s,%d", "445", 4)
     	log.Debugf("%s,%d", "445", 4)
     	log.Warnf("%s,%d", "445", 4)
