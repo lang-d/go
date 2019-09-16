@@ -52,13 +52,20 @@ func (this *ConsoleHandler) Work(level *level, format string, args ...interface{
 		b = &bytes.Buffer{}
 	}
 	msg := this.Formatter.Format(b, level.string(), format, args...)
+
+	var err error
+
 	if level.isEnable(ERROR) {
-		_, _ = this.errorWriter.Write(msg)
+		_, err = this.errorWriter.Write(msg)
 	} else {
-		_, _ = this.writer.Write(msg)
+		_, err = this.writer.Write(msg)
 	}
 	b.Reset()
 	this.bufferPool.Put(b)
+
+	if err != nil {
+		panic(err)
+	}
 
 }
 
@@ -198,9 +205,6 @@ func (this *FileHandler) doWorkForSplitSize(level *level, format string, args ..
 		}
 	} else {
 		size, err = this.Writer.Write(msg)
-		if err != nil {
-			panic(err)
-		}
 
 	}
 	b.Reset()
