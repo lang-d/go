@@ -51,7 +51,14 @@ func (this *ConsoleHandler) Work(level *level, format string, args ...interface{
 	if !ok {
 		b = &bytes.Buffer{}
 	}
-	msg := this.Formatter.Format(b, level.string(), format, args...)
+
+	var msg []byte
+
+	if level.isEnableDetail(EXCEPTION) {
+		msg = this.Formatter.FormatWithDetail(b, level.string(), format, args...)
+	} else {
+		msg = this.Formatter.Format(b, level.string(), format, args...)
+	}
 
 	var err error
 
@@ -190,7 +197,14 @@ func (this *FileHandler) doWorkForSplitSize(level *level, format string, args ..
 	if !ok {
 		b = &bytes.Buffer{}
 	}
-	msg := this.Formatter.Format(b, level.string(), format, args...)
+
+	var msg []byte
+
+	if level.isEnableDetail(EXCEPTION) {
+		msg = this.Formatter.FormatWithDetail(b, level.string(), format, args...)
+	} else {
+		msg = this.Formatter.Format(b, level.string(), format, args...)
+	}
 
 	var size int
 	var err error
@@ -227,7 +241,13 @@ func (this *FileHandler) doWork(level *level, format string, args ...interface{}
 	if !ok {
 		b = &bytes.Buffer{}
 	}
-	msg := this.Formatter.Format(b, level.string(), format, args...)
+	var msg []byte
+
+	if level.isEnableDetail(EXCEPTION) {
+		msg = this.Formatter.FormatWithDetail(b, level.string(), format, args...)
+	} else {
+		msg = this.Formatter.Format(b, level.string(), format, args...)
+	}
 
 	var err error
 

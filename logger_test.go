@@ -11,6 +11,7 @@ func TestLogger(t *testing.T) {
 	log.Debugf("%s,%d", "445", 4)
 	log.Warnf("%s,%d", "445", 4)
 	log.Errorf("%s,%d", "445", 4)
+	log.Exceptionf("%s,%d", "445", 4)
 	log.Fatalf("%s,%d", "445", 4)
 }
 
@@ -41,11 +42,12 @@ func TestFileHanlder(t *testing.T) {
 func TestFileHanlderSplit(t *testing.T) {
 	log.SetHandler(log.NewFileHandler("log/run.log").
 		SetFormatter(log.NewDefaultFormatter()).SetSplitBySize(true, 10*1024*1024))
-	for i := 0; i < 1000000; i++ {
-		log.Infof("%s,%d", "445", 4)
-		log.Debugf("%s,%d", "445", 4)
-		log.Warnf("%s,%d", "445", 4)
-		log.Errorf("%s,%d", "445", 4)
+	for i := 0; i < 10000; i++ {
+		//log.Infof("%s,%d", "445", 4)
+		//log.Debugf("%s,%d", "445", 4)
+		//log.Warnf("%s,%d", "445", 4)
+		//log.Errorf("%s,%d", "445", 4)
+		log.Exceptionf("%s,%d", "445", 4)
 	}
 
 }

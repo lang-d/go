@@ -20,6 +20,10 @@ func Errorf(format string, args ...interface{}) {
 	log.Errorf(format, args...)
 }
 
+func Exceptionf(format string, args ...interface{}) {
+	log.Exceptionf(format, args...)
+}
+
 func Fatalf(format string, args ...interface{}) {
 	log.Fatalf(format, args...)
 }

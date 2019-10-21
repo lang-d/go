@@ -38,6 +38,10 @@ func (this *Logger) Errorf(format string, args ...interface{}) *Logger {
 	return this.Log(ERROR, format, args...)
 }
 
+func (this *Logger) Exceptionf(format string, args ...interface{}) *Logger {
+	return this.Log(EXCEPTION, format, args...)
+}
+
 func (this *Logger) Warnf(format string, args ...interface{}) *Logger {
 	return this.Log(WARN, format, args...)
 }
