@@ -62,7 +62,7 @@ func (this *ConsoleHandler) Work(level *level, format string, args ...interface{
 
 	var err error
 
-	if level.isEnable(ERROR) {
+	if level.isEnableError(ERROR) {
 		_, err = this.errorWriter.Write(msg)
 	} else {
 		_, err = this.writer.Write(msg)
@@ -209,7 +209,7 @@ func (this *FileHandler) doWorkForSplitSize(level *level, format string, args ..
 	var size int
 	var err error
 
-	if level.isEnable(ERROR) {
+	if level.isEnableError(ERROR) {
 
 		if this.ErrorWriter == this.Writer {
 			size, err = this.ErrorWriter.Write(msg)
@@ -251,7 +251,7 @@ func (this *FileHandler) doWork(level *level, format string, args ...interface{}
 
 	var err error
 
-	if level.isEnable(ERROR) {
+	if level.isEnableError(ERROR) {
 		_, err = this.ErrorWriter.Write(msg)
 	} else {
 		_, err = this.Writer.Write(msg)

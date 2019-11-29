@@ -24,6 +24,13 @@ func (this *level) isEnableDetail(lel *level) bool {
 	return false
 }
 
+func (this *level) isEnableError(lel *level) bool {
+	if this.level >= lel.level {
+		return true
+	}
+	return false
+}
+
 var (
 	DEBUG     = &level{name: "debug", level: 0}
 	INFO      = &level{name: "info", level: 1}
