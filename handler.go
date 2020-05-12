@@ -98,21 +98,47 @@ type FileHandler struct {
 	work func(level *level, format string, args ...interface{})
 }
 
-func NewFileHandler(fileName string) *FileHandler {
-	fileWriter, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
-	if err != nil {
-		panic(err)
-	}
-	handler := &FileHandler{
-		FileName:    fileName,
-		Writer:      fileWriter,
-		ErrorWriter: fileWriter,
-		Formatter:   NewDefaultFormatter(),
+func NewFileHandler(fileName string, errorFileNmame string) *FileHandler {
+	if fileName == errorFileNmame {
+		fileWriter, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			panic(err)
+		}
+		errorWriter := fileWriter
+
+		handler := &FileHandler{
+			FileName:    fileName,
+			Writer:      fileWriter,
+			ErrorWriter: errorWriter,
+			Formatter:   NewDefaultFormatter(),
+		}
+
+		handler.work = handler.doWork
+
+		return handler
+
+	} else {
+		fileWriter, err := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			panic(err)
+		}
+		errorWriter, err := os.OpenFile(errorFileNmame, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+		if err != nil {
+			panic(err)
+		}
+
+		handler := &FileHandler{
+			FileName:    fileName,
+			Writer:      fileWriter,
+			ErrorWriter: errorWriter,
+			Formatter:   NewDefaultFormatter(),
+		}
+
+		handler.work = handler.doWork
+
+		return handler
 	}
 
-	handler.work = handler.doWork
-
-	return handler
 }
 
 func (this *FileHandler) createLogFile() *FileHandler {
